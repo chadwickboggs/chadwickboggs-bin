@@ -1,0 +1,1 @@
+/opt/workspace/charter/scripts/java_major_version.sh
