@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-#cp -v target/*.war $CATALINA_HOME/webapps/.
-lspf "{} -name '*.war'" | parallel cp -v "{}" $CATALINA_HOME/webapps/.
+#cp $@ target/*.war $CATALINA_HOME/webapps/.
+lspf "{} -name '*.war'" | parallel cp $@ "{}" $CATALINA_HOME/webapps/.
 
