@@ -45,3 +45,5 @@ fi
 
 bash -c "${cmd}"
 
+exit $?
+
