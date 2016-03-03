@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+SCRIPT_HOME=$(dirname $0)
+
 fast=false
 quiet=false
 silent=false
+dryrun=false
 
 USAGE="$(basename $0) <options>
 
@@ -14,9 +17,10 @@ USAGE="$(basename $0) <options>
 \t\t		[-f|--fast]	Do not clean and do skip tests.  Default: \"${fast}\"
 \t\t		[-q|--quiet]	Suppress all but the final success and failure messages and stderr.  Default: \"${quiet}\"
 \t\t		[-s|--silent]	Suppress stderr.  Default: \"${silent}\"
+\t\t		[-n|--dryrun]	Print but do not execute.  Default: \"${dryrun}\"
 "
 
-args=`getopt -o "hfqs" -l "help,fast,quiet,silent" -- "$@"`
+args=`getopt -o "hfqsn" -l "help,fast,quiet,silent,dryrun" -- "$@"`
 eval set -- "$args"
 while true; do
   case "$1" in
@@ -24,6 +28,7 @@ while true; do
 		-f | --fast)	fast=true; shift;;
 		-q | --quiet)	quiet=true; shift;;
 		-s | --silent)	silent=true; shift;;
+		-n | --dryrun)	dryrun=true; shift;;
 		--) shift; break;;
 		*) echo "Internal error!"; exit 1;;
   esac
@@ -37,10 +42,17 @@ fi
 
 if [[ ${silent} == true ]]; then
 	cmd="${cmd} 2> /dev/null"
+	#cmd="${cmd} | ${SCRIPT_HOME}/silent"
 fi
 
 if [[ ${quiet} == true ]]; then
-	cmd="${cmd} | grep '\[INFO\] BUILD [SF]'"
+	cmd="${cmd} | "${SCRIPT_HOME}/quiet" -e '\[INFO\] BUILD [SF]'"
+fi
+
+if [[ ${dryrun} == true ]]; then
+	echo "${cmd}"
+
+	exit $?
 fi
 
 bash -c "${cmd}"
