@@ -55,11 +55,9 @@ if [[ ${quiet} == true ]]; then
 	cmd="${cmd} | "${SCRIPT_HOME}/quiet" -e '\[INFO\] BUILD [SF]'"
 fi
 
-if [[ ${dryrun} == true ]]; then
-	echo "${cmd}"
+echo "${cmd}"
 
-	exit $?
-fi
+[[ ${dryrun} == true ]] && exit $?
 
 bash -c "${cmd}"
 
