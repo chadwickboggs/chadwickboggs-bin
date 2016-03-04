@@ -26,5 +26,13 @@ while true; do
   esac
 done
 
-tee 2> /dev/null
+if [[ ${pstdout} == true && ${pstderr} == true ]]; then
+	tee $@ 2>&1 1> /dev/null
+elif [[ ${pstdout} == true ]]; then
+	tee $@ 1> /dev/null
+elif [[ ${pstderr} == true ]]; then
+	tee $@ 2> /dev/null
+else
+	tee $@
+fi
 
