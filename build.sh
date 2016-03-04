@@ -47,7 +47,6 @@ else
 fi
 
 if [[ ${silent} == true ]]; then
-	#cmd="${cmd} 2> /dev/null"
 	cmd="${cmd} | ${SCRIPT_HOME}/silent"
 fi
 
