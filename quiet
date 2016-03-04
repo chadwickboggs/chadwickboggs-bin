@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+rexp='.*'
+
+USAGE="$(basename $0) <options>
+
+\t      Grep stdout by the given expression.
+
+\t      Options
+
+\t\t            [-h|--help]     This message gets printed only.
+\t\t            [-e|--rexp]     The regular expression.  Default: \"${rexp}\"
+"
+
+args=`getopt -o "he:" -l "help,rexp" -- "$@"`
+eval set -- "$args"
+while true; do
+  case "$1" in
+                -h | --help)  echo -e "${USAGE}"; exit;;
+                -e | --rexp)  shift; rexp="$1"; shift;;
+                --) shift; break;;
+                *) echo "Internal error!"; exit 1;;
+  esac
+done
+
+grep "${rexp}"
+
+exit $?
+

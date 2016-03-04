@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+pstdout=false
+pstderr=true
+
+USAGE="$(basename $0) <options>
+
+\t      Pipe stdout and/or stderr to /dev/null.
+
+\t      Options
+
+\t\t            [-h|--help]     This message gets printed only.
+\t\t            [-o|--stdout]   Pipe stdout to /dev/null.  Default: \"${pstdout}\"
+\t\t            [-e|--stderr]   Pipe stderr to /dev/null.  Default: \"${pstderr}\"
+"
+
+args=`getopt -o "hoe" -l "help,stdout,stderr" -- "$@"`
+eval set -- "$args"
+while true; do
+  case "$1" in
+                -h | --help)    echo -e "${USAGE}"; exit;;
+                -o | --stdout)  pstdout=true; shift;;
+                -e | --stderr)  pstderr=true; shift;;
+                --) shift; break;;
+                *) echo "Internal error!"; exit 1;;
+  esac
+done
+
+tee 2> /dev/null
+
