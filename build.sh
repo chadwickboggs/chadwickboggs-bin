@@ -57,6 +57,8 @@ else
 	fi
 fi
 
+cmd="${cmd} | tee build_$(now).log"
+
 if [[ ${silent} == true ]]; then
 	cmd="${cmd} | ${SCRIPT_HOME}/silent"
 fi
@@ -64,8 +66,6 @@ fi
 if [[ ${quiet} == true ]]; then
 	cmd="${cmd} | "${SCRIPT_HOME}/quiet" -e '\[INFO\] BUILD [SF]'"
 fi
-
-cmd="${cmd} | tee build_$(now).log"
 
 echo "	Executing: \"${cmd}\""
 
