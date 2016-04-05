@@ -1,0 +1,1 @@
+/opt/workspace/charter/scripts/build_uris.p6

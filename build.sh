@@ -65,6 +65,8 @@ if [[ ${quiet} == true ]]; then
 	cmd="${cmd} | "${SCRIPT_HOME}/quiet" -e '\[INFO\] BUILD [SF]'"
 fi
 
+cmd="${cmd} | tee build_$(now).log"
+
 echo "	Executing: \"${cmd}\""
 
 [[ ${dryrun} == true ]] && exit $?
