@@ -57,7 +57,8 @@ else
 	fi
 fi
 
-cmd="${cmd} | flip -u | tee build_$(now).log"
+tee_filename="build_$(now).log"
+cmd="${cmd} | tee ${tee_filename}"
 
 if [[ ${silent} == true ]]; then
 	cmd="${cmd} | ${SCRIPT_HOME}/silent"
@@ -72,6 +73,9 @@ echo "	Executing: \"${cmd}\""
 [[ ${dryrun} == true ]] && exit $?
 
 bash -c "${cmd}"
+exit_code=$?
 
-exit $?
+flip -u "${tee_filename}"
+
+exit ${exit_code}
 
