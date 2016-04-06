@@ -57,7 +57,7 @@ else
 	fi
 fi
 
-cmd="${cmd} | tee build_$(now).log"
+cmd="${cmd} | flip -u | tee build_$(now).log"
 
 if [[ ${silent} == true ]]; then
 	cmd="${cmd} | ${SCRIPT_HOME}/silent"
