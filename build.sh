@@ -8,6 +8,7 @@ silent=false
 skip_tests=''
 skip_clean=false
 skip_update='-U'
+clean_build_logs=false
 #use_args='-e -P local'
 use_args='-e'
 dryrun=false
@@ -25,11 +26,12 @@ USAGE="$(basename $0) <options>
 \t\t		[-c|--skip_clean]	Skip clean.  Default: false
 \t\t		[-t|--skip_tests]	Skip tests.  Default: false
 \t\t		[-u|--skip_update]	Skip update.  Default: false
+\t\t		[-b|--clean_build_logs]	Clean build log files.  Default: ${clean_build_logs}
 \t\t		[-a|--use_args]		Add args to maven.  Default: \"${use_args}\"
 \t\t		[-n|--dryrun]		Print but do not execute.  Default: \"${dryrun}\"
 "
 
-args=`getopt -o "ha:fqsctun" -l "help,use_args,fast,quiet,silent,skip_clean,skip_tests,skip_update,dryrun" -- "$@"`
+args=`getopt -o "ha:fqsctunb" -l "help,use_args,clean_build_logs,fast,quiet,silent,skip_clean,skip_tests,skip_update,dryrun" -- "$@"`
 eval set -- "$args"
 while true; do
   case "$1" in
@@ -40,12 +42,15 @@ while true; do
 		-c | --skip_clean)	skip_clean=true; shift;;
 		-t | --skip_tests)	skip_tests="-DskipTests -Dmaven.test.skip=true"; shift;;
 		-u | --skip_update)	skip_update=''; shift;;
+		-b | --clean_build_logs)	clean_build_logs=true; shift;;
 		-a | --use_args)	shift; use_args="$1"; shift;;
 		-n | --dryrun)		dryrun=true; shift;;
 		--) shift; break;;
 		*) echo "Internal error!"; exit 1;;
   esac
 done
+
+[[ ${clean_build_logs} == true ]] && ${SCRIPT_HOME}/clean_build_logs.sh
 
 if [[ ${fast} == true ]]; then
 	cmd="mvn ${use_args} ${skip_tests} install $@"
@@ -60,13 +65,9 @@ fi
 tee_filename="build_$(now).log"
 cmd="${cmd} | tee ${tee_filename}"
 
-if [[ ${silent} == true ]]; then
-	cmd="${cmd} | ${SCRIPT_HOME}/silent"
-fi
+[[ ${silent} == true ]] && cmd="${cmd} | ${SCRIPT_HOME}/silent"
 
-if [[ ${quiet} == true ]]; then
-	cmd="${cmd} | "${SCRIPT_HOME}/quiet" -e '\[INFO\] BUILD [SF]'"
-fi
+[[ ${quiet} == true ]] && cmd="${cmd} | ${SCRIPT_HOME}/quiet -e '\[INFO\] BUILD [SF]'"
 
 echo "	Executing: \"${cmd}\""
 
