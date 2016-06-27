@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-rm -v $(lspf "{} -name \"$*\"")
+rm -v $(find . -name "$*")
 
