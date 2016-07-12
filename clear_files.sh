@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
-lspf "{} -name \"$*\"" | parallel "echo -n '' > {}"
+ls $* | parallel "echo -n '' > {}"
+lspf "{} -name $*" | parallel "echo -n '' > {}"
+
+exit 0
 
