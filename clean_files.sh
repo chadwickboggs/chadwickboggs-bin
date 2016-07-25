@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-rm -v $(find . -name "$*")
+files=$(find . -name "$*")
+
+[[ $(echo -n ${files} | wc -l) > 0 ]] && rm -v ${files}
 
