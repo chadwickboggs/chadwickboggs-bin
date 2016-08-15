@@ -2,5 +2,5 @@
 
 files=$(find . -name "$*")
 
-[[ $(echo -n ${files} | wc -l) > 0 ]] && rm -v ${files}
+[[ $(echo ${files} | wc -l) > 0 ]] && rm -v ${files}
 
