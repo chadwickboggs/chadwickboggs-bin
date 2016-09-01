@@ -57,7 +57,7 @@ done
 
 [[ ${clean_build_logs} == true ]] && ${SCRIPT_HOME}/clean_build_logs.sh
 
-cmd="mvn"
+cmd="mvn -Dmaven.wagon.http.ssl.insecure=true"
 
 [[ ${failsafe_debug} == true ]] && cmd="${cmd} ${FAILSAFE_DEBUG_ARGS}"
 
