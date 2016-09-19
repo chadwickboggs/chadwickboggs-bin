@@ -8,6 +8,7 @@ silent=false
 skip_tests=''
 skip_clean=false
 skip_update='-U'
+drink_tee=true
 clean_build_logs=false
 #use_args='-e -P local'
 use_args='-e'
@@ -26,16 +27,17 @@ USAGE="$(basename $0) <options>
 \t\t		[-f|--fast]		Do not clean and do skip tests.  Default: \"${fast}\"
 \t\t		[-q|--quiet]		Suppress all but the final success and failure messages and stderr.  Default: \"${quiet}\"
 \t\t		[-s|--silent]		Suppress stderr.  Default: \"${silent}\"
-\t\t		[-c|--skip_clean]	Skip clean.  Default: false
-\t\t		[-t|--skip_tests]	Skip tests.  Default: false
+\t\t		[-c|--skip_clean]	Skip clean.  Default: ${skip_clean}
+\t\t		[-t|--skip_tests]	Skip tests.  Default: ${skip_tests}
 \t\t		[-u|--skip_update]	Skip update.  Default: false
+\t\t		[-e|--drink_tee]	Do not pipe output through tee.  Default: false
 \t\t		[-b|--clean_build_logs]	Clean build log files.  Default: ${clean_build_logs}
 \t\t		[-a|--use_args]		Add args to maven.  Default: \"${use_args}\"
 \t\t		[-d|--failsafe_debug]	Enable failesafe debug.  Default: \"${failsafe_debug}\"
 \t\t		[-n|--dryrun]		Print but do not execute.  Default: \"${dryrun}\"
 "
 
-args=`getopt -o "ha:fqsctunbd" -l "help,use_args,clean_build_logs,fast,quiet,silent,skip_clean,skip_tests,skip_update,failsafe_debug,dryrun" -- "$@"`
+args=`getopt -o "ha:fqsctunbed" -l "help,use_args,clean_build_logs,fast,quiet,silent,skip_clean,skip_tests,skip_update,failsafe_debug,drink_tee,dryrun" -- "$@"`
 eval set -- "$args"
 while true; do
   case "$1" in
@@ -43,6 +45,7 @@ while true; do
 		-f | --fast)				fast=true; skip_tests="-DskipTests -Dmaven.test.skip=true"; shift;;
 		-q | --quiet)				quiet=true; shift;;
 		-s | --silent)				silent=true; shift;;
+		-e | --drink_tee)			drink_tee=false; shift;;
 		-c | --skip_clean)			skip_clean=true; shift;;
 		-t | --skip_tests)			skip_tests="-DskipTests -Dmaven.test.skip=true"; shift;;
 		-u | --skip_update)			skip_update=''; shift;;
@@ -72,10 +75,8 @@ else
 fi
 
 tee_filename="build_$(now).log"
-cmd="${cmd} | tee ${tee_filename}"
-
+[[ ${drink_tee} == true ]] && cmd="${cmd} | tee ${tee_filename}"
 [[ ${silent} == true ]] && cmd="${cmd} | ${SCRIPT_HOME}/silent"
-
 [[ ${quiet} == true ]] && cmd="${cmd} | ${SCRIPT_HOME}/quiet -e '\[INFO\] BUILD [SF]'"
 
 echo "	Executing: \"${cmd}\""
