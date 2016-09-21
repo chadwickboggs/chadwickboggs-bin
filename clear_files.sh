@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-find . -name $@ | parallel "echo -n '' > {}"
+ls $@ | parallel "echo -n '' > {}"
 
 exit 0
 
