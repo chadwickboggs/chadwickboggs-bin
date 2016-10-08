@@ -2,10 +2,7 @@
 
 echo "[$(now)] Undeploying..."
 
-war_filename="$(pwd|sed 's/.*\/\([^\/]\+\)$/\1/'|tr -d -).war"
-deployed_filename="$CATALINA_HOME"/webapps/"${war_filename}"
-
-lspf -q "{} -name '*.war'" | grep -v cargo | parallel "basename {}" | parallel rm $@ "$CATALINA_HOME/webapps/{}"
+lspf -q "{} -name '*.war'" | grep -v cargo | parallel "basename {}" | parallel "rm $@ $CATALINA_HOME/webapps/{}"
 
 exit_code=$?
 

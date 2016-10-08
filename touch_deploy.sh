@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-war_filename="$(pwd|sed 's/.*\/\([^\/]\+\)$/\1/'|tr -d -).war"
-deployed_filename="$CATALINA_HOME"/webapps/"${war_filename}"
+echo "[$(now)] Touching deployed WAR files."
 
-echo "	Touching deployed WAR file.  Filename: \"${deployed_filename}\""
-touch "${deployed_filename}"
-echo "	Done touching deployed WAR file."
+lspf -q "{} -name '*.war'" | grep -v cargo | parallel "echo Touching $CATALINA_HOME/webapps/{/} && touch $CATALINA_HOME/webapps/{/}"
+
+exit_code=$?
+
+echo "[$(now)] Done touching deployed WAR files."
+
+exit ${exit_code}
 
