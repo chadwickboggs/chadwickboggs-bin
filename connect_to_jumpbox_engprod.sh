@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-#uname="ec2-user"
-uname="cboggs1"
+uname="$USER"
 hname="jumpbox_engprod_west"
-#identity="~/.ssh/DevVPC.pem"
 identity="~/.ssh/id_rsa"
 sshargs=''
 be_quiet=false
