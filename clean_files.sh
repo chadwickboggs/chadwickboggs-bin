@@ -4,7 +4,7 @@
 
 files=$(find . -name "$*")
 
-[[ $(echo -n ${files} | wc -l) == 0 ]] && exit 0
+[[ "${files}" == "" ]] && exit 0
 
 rm -v ${files}
 
