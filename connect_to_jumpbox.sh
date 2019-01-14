@@ -1,1 +1,0 @@
-/opt/workspace/charter/scripts/connect_to_jumpbox.sh

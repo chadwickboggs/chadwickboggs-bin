@@ -1,1 +1,0 @@
-/opt/workspace/charter/scripts/add_localhost_aliases.sh

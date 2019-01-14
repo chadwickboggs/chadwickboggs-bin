@@ -1,1 +1,0 @@
-/opt/workspace/charter/scripts/create_new_service.sh
